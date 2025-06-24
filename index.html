@@ -1,391 +1,426 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SVG to XML</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Convierte archivos SVG a XML Vector Drawable para Android de forma rápida y sencilla. Herramienta online gratuita para desarrolladores." />
+    <meta name="keywords" content="SVG a XML, convertidor SVG, Vector Drawable, Android Studio, desarrollo Android, herramienta desarrollo" />
+    <meta name="author" content="ZendTay Studio" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:title" content="Convertidor SVG a XML Vector Drawable" />
+    <meta property="og:description" content="Herramienta online gratuita para convertir SVG a XML compatible con Android" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://zendtay-studio.github.io/convert-svg-to-xml/" />
+    <meta property="og:image" content="img/ic.png" />
+    <title>Convertidor SVG a XML | Herramienta para desarrolladores Android</title>
+    <!-- Favicon PNG tradicional -->
+    <link rel="icon" type="image/png" href="img/ic.png">
+    <!-- Para Apple devices -->
+    <link rel="apple-touch-icon" href="img/ic.png">
+    <style>
+:root {
+        --primary: #1e5d7c;
+        --primary-dark: #164a63;
+        --secondary: #d2e6f5;
+        --secondary-dark: #c0daf0;
+        --background: #f2f3f5;
+        --text: #333;
+        --card-bg: #fff;
+        --textarea-border: #e0e0e0;
+        --toast-bg: #333;
     }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: #f2f3f5;
-      padding: 20px;
-      min-height: 100vh;
-      position: relative;
-    }
+        body.dark-mode {
+            --primary: #90caf9;
+            --primary-dark: #64b5f6;
+            --secondary: #1e1e1e;
+            --secondary-dark: #333;
+            --background: #121212;
+            --text: #f5f5f5;
+            --card-bg: #1e1e1e;
+            --textarea-border: #444;
+            --toast-bg: #f5f5f5;
+        }
 
-    .dark-mode-toggle {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: none;
-      border: none;
-      font-size: 24px;
-      cursor: pointer;
-      padding: 8px;
-      border-radius: 50%;
-      background-color: rgba(255, 255, 255, 0.8);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding-top: 60px;
-    }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            padding: 20px;
+            min-height: 100vh;
+            position: relative;
+            transition: background 0.3s, color 0.3s;
+        }
 
-    h1 {
-      font-size: 28px;
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 30px;
-      text-align: left;
-    }
-    
-    h2 {
-      font-size: 28px;
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 30px;
-      text-align: left;
-      text-decoration: none;
-    }
-    
-    .link {
-      text-decoration: none;
-      color: #1a73e8;
-    }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--text);
+        }
 
-    .section {
-      margin-bottom: 50px;
-    }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding-top: 60px;
+        }
 
-    .section-title {
-      font-size: 18px;
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 15px;
-    }
+        h1, h2 {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 30px;
+            text-align: left;
+        }
 
-    .textarea-container {
-      position: relative;
-      margin-bottom: 15px;
-    }
+        .section {
+            margin-bottom: 50px;
+        }
 
-    .textarea-container .icon {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      font-size: 20px;
-      z-index: 2;
-    }
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 15px;
+        }
 
-    textarea {
-      width: 100%;
-      height: 200px;
-      padding: 15px;
-      padding-right: 45px;
-      border: 2px solid #e0e0e0;
-      border-radius: 12px;
-      background-color: #ffffff;
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-      line-height: 1.4;
-      color: #666;
-      resize: vertical;
-      outline: none;
-      transition: border-color 0.2s ease;
-    }
+        .textarea-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
 
-    textarea:focus {
-      border-color: #1e5d7c;
-    }
+        .textarea-container .icon {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 20px;
+            z-index: 2;
+        }
 
-    .button-group {
-      display: flex;
-      gap: 0;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 15px;
+            padding-right: 45px;
+            border: 2px solid var(--textarea-border);
+            border-radius: 12px;
+            background-color: var(--card-bg);
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            color: var(--text);
+            resize: vertical;
+            outline: none;
+            transition: all 0.3s ease;
+        }
 
-    .btn {
-      flex: 1;
-      padding: 15px 20px;
-      font-size: 16px;
-      font-weight: 500;
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      outline: none;
-    }
+        textarea:focus {
+            border-color: var(--primary);
+        }
 
-    .btn-primary {
-      background-color: #1e5d7c;
-      color: white;
-    }
+        .button-group {
+            display: flex;
+            gap: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
 
-    .btn-primary:hover {
-      background-color: #164a63;
-    }
+        .btn {
+            flex: 1;
+            padding: 15px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s ease;
+        }
 
-    .btn-secondary {
-      background-color: #d2e6f5;
-      color: #1e5d7c;
-    }
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
 
-    .btn-secondary:hover {
-      background-color: #c0daf0;
-    }
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
 
-    .hidden-input {
-      display: none;
-    }
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--primary);
+        }
 
-    @media (max-width: 480px) {
-      body {
-        padding: 15px;
-      }
+        .btn-secondary:hover {
+            background-color: var(--secondary-dark);
+        }
 
-      .container {
-        padding-top: 50px;
-      }
+        .hidden-input {
+            display: none;
+        }
 
-      h1 {
-        font-size: 24px;
-        margin-bottom: 25px;
-      }
+@media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
 
-      textarea {
-        height: 200px;
-        font-size: 11px;
-        padding: 12px;
-        padding-right: 40px;
-      }
+            .container {
+                padding-top: 50px;
+            }
 
-      .btn {
-        padding: 12px 16px;
-        font-size: 14px;
-      }
+            h1 {
+                font-size: 24px;
+                margin-bottom: 25px;
+            }
 
-      .dark-mode-toggle {
-        top: 15px;
-        right: 15px;
-        font-size: 20px;
-      }
-    }
-  </style>
+            textarea {
+                height: 200px;
+                font-size: 11px;
+                padding: 12px;
+                padding-right: 40px;
+            }
+
+            .btn {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+
+            .dark-mode-toggle {
+                top: 15px;
+                right: 15px;
+                font-size: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-  
-  <div class="container">
-    <h1>SVG</h1>
-    
-    <div class="section">
-      <div class="textarea-container">
-        <div class="icon"></div>
-        <textarea id="svgInput" placeholder="Pega tu código SVG aquí..."></textarea>
-      </div>
-      <div class="button-group">
-        <button class="btn btn-primary" onclick="convert()">Convertir</button>
-        <button class="btn btn-secondary" onclick="selectFile()">Seleccionar</button>
-      </div>
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
+
+    <div class="container">
+        <h1>SVG to XML</h1>
+
+        <div class="section">
+            <div class="textarea-container">
+                <div class="icon">
+                    🤖
+                </div>
+                <textarea id="svgInput" placeholder="Pega tu código SVG aquí..."></textarea>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="convert(); toggleButtonGroup(this)">Convertir</button>
+                <button class="btn btn-secondary" onclick="selectFile(); toggleButtonGroup(this)">Seleccionar</button>
+            </div>
+        </div>
+
+        <h2>XML (Vector)</h2>
+        <div class="textarea-container">
+            <textarea id="xmlOutput" readonly></textarea>
+        </div>
+        <div class="button-group">
+            <button class="btn btn-secondary" onclick="copyXML(); toggleButtonGroup(this)">Copiar</button>
+            <button class="btn btn-primary" onclick="downloadXML(); toggleButtonGroup(this)">Descargar</button>
+        </div>
+
+        <div class="section-title">
+            Alternativa confiable para convertir SVG a XML (svg2android)
+        </div>
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="window.open('https://inloop.github.io/svg2android/', '_blank'); toggleButtonGroup(this)">Visitar Web</button>
+            <!-- <button class="btn btn-secondary" onclick="window.open('https://inloop.github.io/svg2android/', '_blank'); toggleButtonGroup(this)">Descargar App</button> -->
+        </div>
     </div>
 
-    <div class="section">
-      <div class="section-title">XML (Vector)</div>
-      <div class="textarea-container">
-        <textarea id="xmlOutput" readonly></textarea>
-      </div>
-      <div class="button-group">
-        <button class="btn btn-primary" onclick="copyXML()">Copiar</button>
-        <button class="btn btn-secondary" onclick="downloadXML()">Descargar</button>
-      </div>
-    </div>
-  </div>
-  
-  <div class="section-title">Alternativa confiable para convertir SVG a XML</div>
-  <div class="button-group">
-  <button class="btn btn-primary" onclick="window.open('https://inloop.github.io/svg2android/', '_blank')">Visitar</button>
-</div>
+    <input type="file" id="fileInput" class="hidden-input" accept=".svg" onchange="handleFile(event)">
 
-  <input type="file" id="fileInput" class="hidden-input" accept=".svg" onchange="handleFile(event)">
+    <script>
 
-  <script>
-    function selectFile() {
-      document.getElementById('fileInput').click();
-    }
-
-    function handleFile(event) {
-      const file = event.target.files[0];
-      if (!file || !file.name.endsWith('.svg')) {
-        alert("Por favor selecciona un archivo .svg válido.");
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        document.getElementById('svgInput').value = e.target.result;
-        convert();
-      };
-      reader.readAsText(file);
-    }
-
-    function convert() {
-      const svgString = document.getElementById("svgInput").value;
-      try {
-        const xmlResult = svgToVectorDrawable(svgString);
-        document.getElementById("xmlOutput").value = xmlResult;
-      } catch (err) {
-        document.getElementById("xmlOutput").value = "Error: " + err.message;
-      }
-    }
-
-    function copyXML() {
-      const output = document.getElementById("xmlOutput");
-      output.select();
-      output.setSelectionRange(0, 99999);
-      
-      try {
-        document.execCommand("copy");
-        showToast("XML copiado al portapapeles");
-      } catch (err) {
-        // Fallback para navegadores modernos
-        navigator.clipboard.writeText(output.value).then(() => {
-          showToast("XML copiado al portapapeles");
-        }).catch(() => {
-          showToast("Error al copiar");
-        });
-      }
-    }
-
-    function downloadXML() {
-      const xmlContent = document.getElementById("xmlOutput").value;
-      const blob = new Blob([xmlContent], { type: 'text/xml' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = "vector_drawable.xml";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast("Archivo descargado");
-    }
-
-    function showToast(message) {
-      // Crear toast notification
-      const toast = document.createElement('div');
-      toast.textContent = message;
-      toast.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #333;
-        color: white;
-        padding: 12px 24px;
-        border-radius: 8px;
-        font-size: 14px;
-        z-index: 1000;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      `;
-      
-      document.body.appendChild(toast);
-      
-      // Mostrar toast
-      setTimeout(() => toast.style.opacity = '1', 100);
-      
-      // Ocultar toast después de 2 segundos
-      setTimeout(() => {
-        toast.style.opacity = '0';
-        setTimeout(() => document.body.removeChild(toast), 300);
-      }, 2000);
-    }
-
-    function svgToVectorDrawable(svgString) {
-      const parser = new DOMParser();
-      const svgDoc = parser.parseFromString(svgString, "image/svg+xml");
-      const svgEl = svgDoc.querySelector('svg');
-
-      if (!svgEl) throw new Error("No se encontró elemento <svg>");
-
-      // Obtener dimensiones
-      let width = svgEl.getAttribute('width') || '24';
-      let height = svgEl.getAttribute('height') || '24';
-      
-      // Limpiar unidades
-      width = width.replace(/[^\d.]/g, '');
-      height = height.replace(/[^\d.]/g, '');
-
-      const viewBox = svgEl.getAttribute('viewBox') || `0 0 ${width} ${height}`;
-      const [minX, minY, vWidth, vHeight] = viewBox.split(/\s+/);
-
-      // Buscar elementos path
-      const paths = svgDoc.querySelectorAll('path');
-      if (paths.length === 0) throw new Error("No se encontraron elementos <path>");
-
-      let pathElements = '';
-      paths.forEach(path => {
-        const d = path.getAttribute('d');
-        const fill = path.getAttribute('fill') || '#000000';
-        const stroke = path.getAttribute('stroke');
-        const strokeWidth = path.getAttribute('stroke-width');
-        
-        if (d) {
-          pathElements += `
-  <path`;
-          
-          if (fill && fill !== 'none') {
-            pathElements += `
-      android:fillColor="${fill}"`;
-          }
-          
-          if (stroke && stroke !== 'none') {
-            pathElements += `
-      android:strokeColor="${stroke}"`;
-            if (strokeWidth) {
-              pathElements += `
-      android:strokeWidth="${strokeWidth}"`;
+        (function restoreDarkMode() {
+            const isDark = localStorage.getItem('darkMode') === 'true';
+            if (isDark) {
+                document.body.classList.add('dark-mode');
+                const toggle = document.querySelector('.dark-mode-toggle');
+                if (toggle) toggle.textContent = '☀️';
             }
-          }
-          
-          pathElements += `
-      android:pathData="${d}" />`;
+        })();
+
+
+        function toggleDarkMode() {
+            const body = document.body;
+            const toggle = document.querySelector('.dark-mode-toggle');
+            const isDark = body.classList.toggle('dark-mode');
+            toggle.textContent = isDark ? '☀️': '🌙';
+            localStorage.setItem('darkMode',
+                isDark ? 'true': 'false');
         }
-      });
 
-      return `<?xml version="1.0" encoding="utf-8"?>
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="${width}dp"
-    android:height="${height}dp"
-    android:viewportWidth="${vWidth || width}"
-    android:viewportHeight="${vHeight || height}">
-${pathElements}
-</vector>`;
-    }
+        function selectFile() {
+            document.getElementById('fileInput').click();
+        }
 
-    // Permitir hacer clic en los textareas para seleccionar todo el contenido
-    document.getElementById('svgInput').addEventListener('click', function() {
-      this.select();
-    });
+        function handleFile(event) {
+            const file = event.target.files[0];
+            if (!file || !file.name.endsWith('.svg')) {
+                alert("Por favor selecciona un archivo .svg válido.");
+                return;
+            }
 
-    document.getElementById('xmlOutput').addEventListener('click', function() {
-      this.select();
-    });
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('svgInput').value = e.target.result;
+                convert();
+            };
+            reader.readAsText(file);
+        }
 
-    // Convertir automáticamente cuando se modifica el SVG
-    document.getElementById('svgInput').addEventListener('input', function() {
-      if (this.value.trim()) {
-        convert();
-      }
-    });
-  </script>
+        function convert() {
+            const svgString = document.getElementById("svgInput").value;
+            try {
+                const xmlResult = svgToVectorDrawable(svgString);
+                document.getElementById("xmlOutput").value = xmlResult;
+            } catch (err) {
+                document.getElementById("xmlOutput").value = "Error: " + err.message;
+            }
+        }
+
+        function copyXML() {
+            const output = document.getElementById("xmlOutput");
+            output.select();
+            output.setSelectionRange(0, 99999);
+
+            try {
+                document.execCommand("copy");
+                showToast("XML copiado al portapapeles");
+            } catch (err) {
+                navigator.clipboard.writeText(output.value).then(() => {
+                    showToast("XML copiado al portapapeles");
+                }).catch(() => {
+                    showToast("Error al copiar");
+                });
+            }
+        }
+
+        function downloadXML() {
+            const xmlContent = document.getElementById("xmlOutput").value;
+            const blob = new Blob([xmlContent], {
+                type: 'text/xml'
+            });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "vector_drawable.xml";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast("Archivo descargado");
+        }
+
+        function toggleButtonGroup(clickedBtn) {
+            const group = clickedBtn.parentElement;
+            const buttons = group.querySelectorAll('.btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-secondary');
+            });
+            clickedBtn.classList.remove('btn-secondary');
+            clickedBtn.classList.add('btn-primary');
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.textContent = message;
+            toast.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--toast-bg);
+            color: ${document.body.classList.contains('dark-mode') ? '#121212': '#fff'};
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.style.opacity = '1', 100);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 2000);
+        }
+
+        function svgToVectorDrawable(svgString) {
+            const parser = new DOMParser();
+            const svgDoc = parser.parseFromString(svgString, "image/svg+xml");
+            const svgEl = svgDoc.querySelector('svg');
+            if (!svgEl) throw new Error("No se encontró elemento <svg>");
+
+            let width = svgEl.getAttribute('width') || '24';
+            let height = svgEl.getAttribute('height') || '24';
+            width = width.replace(/[^\d.]/g, '');
+            height = height.replace(/[^\d.]/g, '');
+            const viewBox = svgEl.getAttribute('viewBox') || `0 0 ${width} ${height}`;
+            const [minX,
+                minY,
+                vWidth,
+                vHeight] = viewBox.split(/\s+/);
+
+            const paths = svgDoc.querySelectorAll('path');
+            if (paths.length === 0) throw new Error("No se encontraron elementos <path>");
+
+            let pathElements = '';
+            paths.forEach(path => {
+                const d = path.getAttribute('d');
+                const fill = path.getAttribute('fill') || '#000000';
+                const stroke = path.getAttribute('stroke');
+                const strokeWidth = path.getAttribute('stroke-width');
+
+                if (d) {
+                    pathElements += `<path`;
+                    if (fill && fill !== 'none') {
+                        pathElements += `\n    android:fillColor="${fill}"`;
+                    }
+                    if (stroke && stroke !== 'none') {
+                        pathElements += `\n    android:strokeColor="${stroke}"`;
+                        if (strokeWidth) {
+                            pathElements += `\n    android:strokeWidth="${strokeWidth}"`;
+                        }
+                    }
+                    pathElements += `\n    android:pathData="${d}" />\n`;
+                }
+            });
+
+            return `<?xml version="1.0" encoding="utf-8"?>\n<vector xmlns:android="http://schemas.android.com/apk/res/android"\n    android:width="${width}dp"\n    android:height="${height}dp"\n    android:viewportWidth="${vWidth}"\n    android:viewportHeight="${vHeight}">\n${pathElements}</vector>`;
+        }
+
+        // Selección de contenido
+        document.getElementById('svgInput').addEventListener('click', function () {
+            this.select();
+        });
+
+        document.getElementById('xmlOutput').addEventListener('click', function () {
+            this.select();
+        });
+
+        document.getElementById('svgInput').addEventListener('input', function () {
+            if (this.value.trim()) convert();
+        });
+    </script>
 </body>
 </html>
