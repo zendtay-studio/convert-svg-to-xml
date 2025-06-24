@@ -46,6 +46,20 @@
       margin-bottom: 30px;
       text-align: left;
     }
+    
+    h2 {
+      font-size: 28px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 30px;
+      text-align: left;
+      text-decoration: none;
+    }
+    
+    .link {
+      text-decoration: none;
+      color: #1a73e8;
+    }
 
     .section {
       margin-bottom: 50px;
@@ -170,7 +184,7 @@
 <body>
   
   <div class="container">
-    <h1>SVG to XML</h1>
+    <h1>SVG</h1>
     
     <div class="section">
       <div class="textarea-container">
@@ -194,6 +208,11 @@
       </div>
     </div>
   </div>
+  
+  <div class="section-title">Alternativa confiable para convertir SVG a XML</div>
+  <div class="button-group">
+  <button class="btn btn-primary" onclick="window.open('https://inloop.github.io/svg2android/', '_blank')">Visitar</button>
+</div>
 
   <input type="file" id="fileInput" class="hidden-input" accept=".svg" onchange="handleFile(event)">
 
