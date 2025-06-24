@@ -205,6 +205,22 @@
                 font-size: 20px;
             }
         }
+           .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer a:hover {
+            color: var(--primary-dark);
+        }
     </style>
 </head>
 <body>
@@ -243,7 +259,10 @@
             <!-- <button class="btn btn-secondary" onclick="window.open('https://inloop.github.io/svg2android/', '_blank'); toggleButtonGroup(this)">Descargar App</button> -->
         </div>
     </div>
-
+        <div class="footer">
+        <p>&copy; 2025 ZendTay Studio™. Todos los derechos reservados. 
+  <a href="#privacy-policy" onclick="window.open('https://zendtay-studio.github.io/privacy-policy', '_blank')">Política de Privacidad</a></p>
+    </div>
     <input type="file" id="fileInput" class="hidden-input" accept=".svg" onchange="handleFile(event)">
 
     <script>
