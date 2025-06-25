@@ -17,6 +17,11 @@
     <link rel="icon" type="image/png" href="img/ic.png">
     <!-- Para Apple devices -->
     <link rel="apple-touch-icon" href="img/ic.png">
+      <!-- Color por defecto para status bar y nav bar -->
+  <meta name="theme-color" content="#f2f3f5">
+  <!-- iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
 :root {
         --primary: #1e5d7c;
@@ -78,12 +83,28 @@
             padding-top: 60px;
         }
 
-        h1, h2 {
+        h1 {
             font-size: 28px;
             font-weight: bold;
             color: var(--text);
             margin-bottom: 30px;
             text-align: left;
+        }
+        
+        h2 {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        a, p {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 30px;
+            text-align: center;
         }
 
         .section {
@@ -225,10 +246,8 @@
 </head>
 <body>
     <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
-
     <div class="container">
         <h1>SVG to XML</h1>
-
         <div class="section">
             <div class="textarea-container">
                 <div class="icon">
@@ -252,10 +271,10 @@
         </div>
 
         <div class="section-title">
-            Alternativa confiable para convertir SVG a XML (svg2android)
+            <h2>Alternativa confiable para convertir SVG a XML (svg2android)</h2>
         </div>
         <div class="button-group">
-            <button class="btn btn-primary" onclick="window.open('https://inloop.github.io/svg2android/', '_blank'); toggleButtonGroup(this)">Visitar Web</button>
+            <button class="btn btn-primary" onclick="window.open('https://inloop.github.io/svg2android/', '_blank'); toggleButtonGroup(this)">Visitar página Web</button>
             <!-- <button class="btn btn-secondary" onclick="window.open('https://inloop.github.io/svg2android/', '_blank'); toggleButtonGroup(this)">Descargar App</button> -->
         </div>
     </div>
@@ -441,5 +460,21 @@
             if (this.value.trim()) convert();
         });
     </script>
+     <script>
+    window.addEventListener('DOMContentLoaded', () => {
+  const bg = getComputedStyle(document.documentElement)
+    .getPropertyValue('--background').trim();
+
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
+  if (themeMeta && bg) {
+    themeMeta.setAttribute('content', bg);
+  }
+
+  const appleMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+  if (appleMeta) {
+    appleMeta.setAttribute('content', bg === '#ffffff' || bg === '#f2f3f5' ? 'default' : 'black-translucent');
+  }
+});
+  </script>
 </body>
 </html>
