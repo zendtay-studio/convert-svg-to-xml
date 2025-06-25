@@ -100,7 +100,7 @@
         }
         
         a, p {
-            font-size: 15px;
+            font-size: 12px;
             font-weight: 400;
             color: var(--text);
             margin-bottom: 30px;
@@ -256,8 +256,8 @@
                 <textarea id="svgInput" placeholder="Pega tu código SVG aquí..."></textarea>
             </div>
             <div class="button-group">
-                <button class="btn btn-primary" onclick="convert(); toggleButtonGroup(this)">Convertir</button>
-                <button class="btn btn-secondary" onclick="selectFile(); toggleButtonGroup(this)">Seleccionar</button>
+                <button class="btn btn-secondary" onclick="convert(); toggleButtonGroup(this)">Convertir</button>
+                <button class="btn btn-primary" onclick="selectFile(); toggleButtonGroup(this)">Seleccionar</button>
             </div>
         </div>
 
@@ -266,8 +266,8 @@
             <textarea id="xmlOutput" readonly></textarea>
         </div>
         <div class="button-group">
-            <button class="btn btn-secondary" onclick="copyXML(); toggleButtonGroup(this)">Copiar</button>
-            <button class="btn btn-primary" onclick="downloadXML(); toggleButtonGroup(this)">Descargar</button>
+            <button class="btn btn-primary" onclick="copyXML(); toggleButtonGroup(this)">Copiar</button>
+            <button class="btn btn-secondary" onclick="downloadXML(); toggleButtonGroup(this)">Descargar</button>
         </div>
 
         <div class="section-title">
@@ -279,8 +279,8 @@
         </div>
     </div>
         <div class="footer">
-        <p>&copy; 2025 ZendTay Studio™. Todos los derechos reservados. 
-  <a href="#privacy-policy" onclick="window.open('https://zendtay-studio.github.io/privacy-policy', '_blank')">Política de Privacidad</a></p>
+        <p>Al utilizar esta web, usted acepta nuestra 
+  <a href="#privacy-policy" onclick="window.open('https://zendtay-studio.github.io/privacy-policy', '_blank')">Política de Privacidad</a>.</p>
     </div>
     <input type="file" id="fileInput" class="hidden-input" accept=".svg" onchange="handleFile(event)">
 
