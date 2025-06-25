@@ -5,4 +5,4 @@
 
 ---
 
-> Este proyecto es una herramienta ligera y funcional para desarrolladores Android. Si deseas colaborar o sugerir mejoras, puedes enviar tus propuestas por [GitHub](https://zendtay-studio.github.io/convert-svg-to-xml/).
+> Este proyecto es una herramienta ligera y funcional para desarrolladores Android. Si deseas colaborar o sugerir mejoras, puedes enviar tus propuestas por [Email](mailto:zendtaystudio@gmail.com).
