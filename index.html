@@ -1,707 +1,756 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-    <meta name="description" content="Convierte archivos SVG a XML Vector Drawable para Android. Herramienta online gratuita para desarrolladores." />
-    <meta name="keywords" content="SVG a XML, convertidor SVG, Vector Drawable, Android Studio, desarrollo Android" />
-    <meta name="author" content="ZendTay Studio" />
-    <meta name="theme-color" content="#f8fafc" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta property="og:title" content="Convertidor SVG a XML Vector Drawable" />
-    <meta property="og:description" content="Herramienta online gratuita para convertir SVG a XML compatible con Android" />
-    <meta property="og:type" content="website" />
-    <link rel="icon" type="image/png" href="img/ic.png" />
-    <link rel="apple-touch-icon" href="img/ic.png" />
-    <title>SVG to XML · Vector Drawable Converter</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-primary: #f8fafc;
-            --bg-secondary: #ffffff;
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
-            --border: #e2e8f0;
-            --border-focus: #3b82f6;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            --radius-lg: 16px;
-            --radius-md: 12px;
-            --radius-sm: 8px;
-            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        body.dark {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --accent: #60a5fa;
-            --accent-hover: #3b82f6;
-            --border: #334155;
-            --border-focus: #60a5fa;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-            padding: 24px 16px;
-            transition: var(--transition);
-        }
-
-        .app {
-            max-width: 680px;
-            margin: 0 auto;
-        }
-
-        /* Header */
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 32px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--accent), #8b5cf6);
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 18px;
-            color: white;
-        }
-
-        .logo h1 {
-            font-size: 24px;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-        }
-
-        .theme-toggle {
-            width: 44px;
-            height: 44px;
-            border-radius: var(--radius-sm);
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transition);
-            color: var(--text-primary);
-        }
-
-        .theme-toggle:hover {
-            background: var(--border);
-        }
-
-        /* Cards */
-        .card {
-            background: var(--bg-secondary);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            margin-bottom: 24px;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .badge {
-            background: var(--accent);
-            color: white;
-            font-size: 11px;
-            font-weight: 500;
-            padding: 2px 8px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        /* Textareas */
-        .textarea-wrapper {
-            position: relative;
-        }
-
-        textarea {
-            width: 100%;
-            min-height: 200px;
-            padding: 16px;
-            background: var(--bg-primary);
-            border: 1.5px solid var(--border);
-            border-radius: var(--radius-md);
-            font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
-            font-size: 13px;
-            line-height: 1.5;
-            color: var(--text-primary);
-            resize: vertical;
-            outline: none;
-            transition: var(--transition);
-        }
-
-        textarea:focus {
-            border-color: var(--border-focus);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        textarea[readonly] {
-            background: var(--bg-primary);
-            cursor: default;
-        }
-
-        /* Buttons */
-        .button-group {
-            display: flex;
-            gap: 12px;
-            margin-top: 16px;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 12px 20px;
-            border-radius: var(--radius-sm);
-            font-size: 14px;
-            font-weight: 500;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: transparent;
-            border: 1.5px solid var(--border);
-            color: var(--text-primary);
-        }
-
-        .btn-primary {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--accent-hover);
-            border-color: var(--accent-hover);
-        }
-
-        .btn-secondary {
-            background: var(--bg-secondary);
-            border-color: var(--border);
-        }
-
-        .btn-secondary:hover {
-            background: var(--bg-primary);
-        }
-
-        .btn-icon {
-            width: 18px;
-            height: 18px;
-        }
-
-        /* File input */
-        .file-input {
-            display: none;
-        }
-
-        /* Alternative link card */
-        .alt-card {
-            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
-            border: 1px solid var(--border);
-        }
-
-        .alt-link {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            text-decoration: none;
-            color: var(--text-primary);
-        }
-
-        .alt-link-content {
-            flex: 1;
-        }
-
-        .alt-link h3 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .alt-link p {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .arrow-icon {
-            opacity: 0.5;
-            transition: var(--transition);
-        }
-
-        .alt-link:hover .arrow-icon {
-            opacity: 1;
-            transform: translateX(4px);
-        }
-
-        /* Footer */
-        .footer {
-            margin-top: 32px;
-            text-align: center;
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .footer a {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--text-primary);
-            color: var(--bg-primary);
-            padding: 12px 24px;
-            border-radius: 40px;
-            font-size: 14px;
-            font-weight: 500;
-            box-shadow: var(--shadow-md);
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-        }
-
-        /* SVG Icons */
-        .icon {
-            width: 20px;
-            height: 20px;
-            stroke: currentColor;
-            stroke-width: 2;
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        /* Responsive */
-        @media (max-width: 480px) {
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"
+        />
+        <meta
+            name="description"
+            content="Convierte archivos SVG a XML Vector Drawable para Android. Herramienta online gratuita para desarrolladores."
+        />
+        <meta
+            name="keywords"
+            content="SVG a XML, convertidor SVG, Vector Drawable, Android Studio, desarrollo Android"
+        />
+        <meta name="author" content="ZendTay Studio" />
+        <meta name="theme-color" content="#f8fafc" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta
+            property="og:title"
+            content="Convertidor SVG a XML Vector Drawable"
+        />
+        <meta
+            property="og:description"
+            content="Herramienta online gratuita para convertir SVG a XML compatible con Android"
+        />
+        <meta property="og:type" content="website" />
+        <link rel="icon" type="image/png" href="img/ic.png" />
+        <link rel="apple-touch-icon" href="img/ic.png" />
+        <title>SVG to XML · Vector Drawable Converter</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            :root {
+                --bg-primary: #f8fafc;
+                --bg-secondary: #ffffff;
+                --text-primary: #0f172a;
+                --text-secondary: #475569;
+                --accent: #3b82f6;
+                --accent-hover: #2563eb;
+                --border: #e2e8f0;
+                --border-focus: #3b82f6;
+                --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+                --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+                --radius-lg: 16px;
+                --radius-md: 12px;
+                --radius-sm: 8px;
+                --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            body.dark {
+                --bg-primary: #0f172a;
+                --bg-secondary: #1e293b;
+                --text-primary: #f1f5f9;
+                --text-secondary: #94a3b8;
+                --accent: #60a5fa;
+                --accent-hover: #3b82f6;
+                --border: #334155;
+                --border-focus: #60a5fa;
+                --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+                --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+            }
             body {
-                padding: 16px 12px;
+                font-family:
+                    "Inter",
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    "Segoe UI",
+                    Roboto,
+                    sans-serif;
+                background: var(--bg-primary);
+                color: var(--text-primary);
+                line-height: 1.6;
+                min-height: 100vh;
+                padding: 24px 16px;
+                transition: var(--transition);
             }
-
+            .app {
+                max-width: 680px;
+                margin: 0 auto;
+            }
+            /* Header */
+            .header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 32px;
+            }
+            .logo {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+                background: linear-gradient(135deg, var(--accent), #8b5cf6);
+                border-radius: var(--radius-sm);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 600;
+                font-size: 18px;
+                color: white;
+            }
             .logo h1 {
-                font-size: 20px;
+                font-size: 24px;
+                font-weight: 600;
+                letter-spacing: -0.02em;
             }
-
+            .theme-toggle {
+                width: 44px;
+                height: 44px;
+                border-radius: var(--radius-sm);
+                background: var(--bg-secondary);
+                border: 1px solid var(--border);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: var(--transition);
+                color: var(--text-primary);
+            }
+            .theme-toggle:hover {
+                background: var(--border);
+            }
+            /* Cards */
             .card {
-                padding: 20px 16px;
+                background: var(--bg-secondary);
+                border-radius: var(--radius-lg);
+                padding: 24px;
+                margin-bottom: 24px;
+                border: 1px solid var(--border);
+                box-shadow: var(--shadow-sm);
             }
-
+            .card-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 16px;
+            }
+            .card-title {
+                font-size: 16px;
+                font-weight: 600;
+                color: var(--text-primary);
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .badge {
+                background: var(--accent);
+                color: white;
+                font-size: 11px;
+                font-weight: 500;
+                padding: 2px 8px;
+                border-radius: 20px;
+                text-transform: uppercase;
+                letter-spacing: 0.3px;
+            }
+            /* Textareas */
+            .textarea-wrapper {
+                position: relative;
+            }
             textarea {
-                min-height: 180px;
-                font-size: 12px;
-                padding: 14px;
+                width: 100%;
+                min-height: 200px;
+                padding: 16px;
+                background: var(--bg-primary);
+                border: 1.5px solid var(--border);
+                border-radius: var(--radius-md);
+                font-family: "JetBrains Mono", "SF Mono", "Monaco",
+                    "Inconsolata", "Fira Code", monospace;
+                font-size: 13px;
+                line-height: 1.5;
+                color: var(--text-primary);
+                resize: vertical;
+                outline: none;
+                transition: var(--transition);
             }
-
+            textarea:focus {
+                border-color: var(--border-focus);
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            }
+            textarea[readonly] {
+                background: var(--bg-primary);
+                cursor: default;
+            }
+            /* Buttons */
+            .button-group {
+                display: flex;
+                gap: 12px;
+                margin-top: 16px;
+            }
             .btn {
-                padding: 14px 16px;
+                flex: 1;
+                padding: 12px 20px;
+                border-radius: var(--radius-sm);
+                font-size: 14px;
+                font-weight: 500;
+                border: none;
+                cursor: pointer;
+                transition: var(--transition);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                background: transparent;
+                border: 1.5px solid var(--border);
+                color: var(--text-primary);
             }
-
-            .button-group {
-                flex-direction: column;
+            .btn-primary {
+                background: var(--accent);
+                border-color: var(--accent);
+                color: white;
             }
-        }
-
-        @media (min-width: 481px) and (max-width: 768px) {
-            .button-group {
-                gap: 10px;
+            .btn-primary:hover {
+                background: var(--accent-hover);
+                border-color: var(--accent-hover);
             }
-        }
-    </style>
-</head>
-<body>
-    <div class="app">
-        <!-- Header -->
-        <header class="header">
-            <div class="logo">
-                <div class="logo-icon">SX</div>
-                <h1>SVG to XML</h1>
-            </div>
-            <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
-                <svg class="icon" viewBox="0 0 24 24">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                </svg>
-            </button>
-        </header>
-
-        <!-- Input Section -->
-        <div class="card">
-            <div class="card-header">
-                <span class="card-title">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <polyline points="16 18 22 12 16 6" />
-                        <polyline points="8 6 2 12 8 18" />
-                    </svg>
-                    Código SVG
-                </span>
-                <span class="badge">Entrada</span>
-            </div>
-            <div class="textarea-wrapper">
-                <textarea id="svgInput" placeholder="Pega tu código SVG aquí..."></textarea>
-            </div>
-            <div class="button-group">
-                <button class="btn btn-primary" id="convertBtn">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <polyline points="23 4 23 10 17 10" />
-                        <polyline points="1 20 1 14 7 14" />
-                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
-                    </svg>
-                    Convertir
-                </button>
-                <button class="btn btn-secondary" id="selectFileBtn">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
-                        <polyline points="13 2 13 9 20 9" />
-                    </svg>
-                    Seleccionar archivo
-                </button>
-            </div>
-        </div>
-
-        <!-- Output Section -->
-        <div class="card">
-            <div class="card-header">
-                <span class="card-title">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <rect x="2" y="2" width="20" height="20" rx="2.18" />
-                        <line x1="8" y1="2" x2="8" y2="22" />
-                        <line x1="16" y1="2" x2="16" y2="22" />
-                        <line x1="2" y1="8" x2="22" y2="8" />
-                        <line x1="2" y1="16" x2="22" y2="16" />
-                    </svg>
-                    Vector Drawable XML
-                </span>
-                <span class="badge">Salida</span>
-            </div>
-            <div class="textarea-wrapper">
-                <textarea id="xmlOutput" readonly placeholder="El XML convertido aparecerá aquí..."></textarea>
-            </div>
-            <div class="button-group">
-                <button class="btn btn-primary" id="copyBtn">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <rect x="9" y="9" width="13" height="13" rx="2" />
-                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                    </svg>
-                    Copiar XML
-                </button>
-                <button class="btn btn-secondary" id="downloadBtn">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                        <polyline points="7 10 12 15 17 10" />
-                        <line x1="12" y1="15" x2="12" y2="3" />
-                    </svg>
-                    Descargar
-                </button>
-            </div>
-        </div>
-
-        <!-- Alternative Tool Card -->
-        <div class="card alt-card">
-            <a href="https://inloop.github.io/svg2android/" target="_blank" rel="noopener" class="alt-link">
-                <div class="alt-link-content">
-                    <h3>¿Necesitas una alternativa?</h3>
-                    <p>svg2android — Convertidor online con soporte avanzado</p>
+            .btn-secondary {
+                background: var(--bg-secondary);
+                border-color: var(--border);
+            }
+            .btn-secondary:hover {
+                background: var(--bg-primary);
+            }
+            .btn-icon {
+                width: 18px;
+                height: 18px;
+            }
+            /* File input */
+            .file-input {
+                display: none;
+            }
+            /* Alternative link card */
+            .alt-card {
+                background: linear-gradient(
+                    135deg,
+                    var(--bg-secondary),
+                    var(--bg-primary)
+                );
+                border: 1px solid var(--border);
+            }
+            .alt-link {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                text-decoration: none;
+                color: var(--text-primary);
+            }
+            .alt-link-content {
+                flex: 1;
+            }
+            .alt-link h3 {
+                font-size: 16px;
+                font-weight: 600;
+                margin-bottom: 4px;
+            }
+            .alt-link p {
+                font-size: 13px;
+                color: var(--text-secondary);
+            }
+            .arrow-icon {
+                opacity: 0.5;
+                transition: var(--transition);
+            }
+            .alt-link:hover .arrow-icon {
+                opacity: 1;
+                transform: translateX(4px);
+            }
+            /* Footer */
+            .footer {
+                margin-top: 32px;
+                text-align: center;
+                font-size: 13px;
+                color: var(--text-secondary);
+            }
+            .footer a {
+                color: var(--accent);
+                text-decoration: none;
+                font-weight: 500;
+            }
+            .footer a:hover {
+                text-decoration: underline;
+            }
+            /* Toast */
+            .toast {
+                position: fixed;
+                bottom: 24px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: var(--text-primary);
+                color: var(--bg-primary);
+                padding: 12px 24px;
+                border-radius: 40px;
+                font-size: 14px;
+                font-weight: 500;
+                box-shadow: var(--shadow-md);
+                z-index: 1000;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                pointer-events: none;
+            }
+            /* SVG Icons */
+            .icon {
+                width: 20px;
+                height: 20px;
+                stroke: currentColor;
+                stroke-width: 2;
+                fill: none;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+            }
+            /* Responsive */
+            @media (max-width: 480px) {
+                body {
+                    padding: 16px 12px;
+                }
+                .logo h1 {
+                    font-size: 20px;
+                }
+                .card {
+                    padding: 20px 16px;
+                }
+                textarea {
+                    min-height: 180px;
+                    font-size: 12px;
+                    padding: 14px;
+                }
+                .btn {
+                    padding: 14px 16px;
+                }
+                .button-group {
+                    flex-direction: column;
+                }
+            }
+            @media (min-width: 481px) and (max-width: 768px) {
+                .button-group {
+                    gap: 10px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="app">
+            <!-- Header -->
+            <header class="header">
+                <div class="logo">
+                    <div class="logo-icon">SX</div>
+                    <h1>SVG to XML</h1>
                 </div>
-                <svg class="icon arrow-icon" viewBox="0 0 24 24">
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                    <polyline points="12 5 19 12 12 19" />
-                </svg>
-            </a>
+                <button
+                    class="theme-toggle"
+                    id="themeToggle"
+                    aria-label="Cambiar tema"
+                >
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path
+                            d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                        />
+                    </svg>
+                </button>
+            </header>
+            <!-- Input Section -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <polyline points="16 18 22 12 16 6" />
+                            <polyline points="8 6 2 12 8 18" />
+                        </svg>
+                        Código SVG
+                    </span>
+                    <span class="badge">Entrada</span>
+                </div>
+                <div class="textarea-wrapper">
+                    <textarea
+                        id="svgInput"
+                        placeholder="Pega tu código SVG aquí..."
+                    ></textarea>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" id="convertBtn">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <polyline points="23 4 23 10 17 10" />
+                            <polyline points="1 20 1 14 7 14" />
+                            <path
+                                d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"
+                            />
+                        </svg>
+                        Convertir
+                    </button>
+                    <button class="btn btn-secondary" id="selectFileBtn">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path
+                                d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"
+                            />
+                            <polyline points="13 2 13 9 20 9" />
+                        </svg>
+                        Seleccionar archivo
+                    </button>
+                </div>
+            </div>
+            <!-- Output Section -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <rect
+                                x="2"
+                                y="2"
+                                width="20"
+                                height="20"
+                                rx="2.18"
+                            />
+                            <line x1="8" y1="2" x2="8" y2="22" />
+                            <line x1="16" y1="2" x2="16" y2="22" />
+                            <line x1="2" y1="8" x2="22" y2="8" />
+                            <line x1="2" y1="16" x2="22" y2="16" />
+                        </svg>
+                        Vector Drawable XML
+                    </span>
+                    <span class="badge">Salida</span>
+                </div>
+                <div class="textarea-wrapper">
+                    <textarea
+                        id="xmlOutput"
+                        readonly
+                        placeholder="El XML convertido aparecerá aquí..."
+                    ></textarea>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" id="copyBtn">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <rect x="9" y="9" width="13" height="13" rx="2" />
+                            <path
+                                d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                            />
+                        </svg>
+                        Copiar XML
+                    </button>
+                    <button class="btn btn-secondary" id="downloadBtn">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path
+                                d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                            />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        Descargar
+                    </button>
+                </div>
+            </div>
+            <!-- Alternative Tool Card -->
+            <div class="card alt-card">
+                <a
+                    href="https://inloop.github.io/svg2android/"
+                    target="_blank"
+                    rel="noopener"
+                    class="alt-link"
+                >
+                    <div class="alt-link-content">
+                        <h3>¿Necesitas una alternativa?</h3>
+                        <p>
+                            svg2android — Convertidor online con soporte
+                            avanzado
+                        </p>
+                    </div>
+                    <svg class="icon arrow-icon" viewBox="0 0 24 24">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                </a>
+            </div>
+            <!-- Footer -->
+            <footer class="footer">
+                <p>
+                    Al utilizar esta herramienta, aceptas nuestra
+                    <a
+                        href="https://zendtay-studio.github.io/privacy-policy"
+                        target="_blank"
+                        rel="noopener"
+                        >Política de Privacidad</a
+                    >
+                </p>
+                <p style="margin-top: 8px; opacity: 0.7">
+                    ZendTay Studio™ · Herramienta para desarrolladores Android
+                </p>
+            </footer>
         </div>
+        <!-- Hidden file input -->
+        <input type="file" id="fileInput" class="file-input" accept=".svg" />
+        <script>
+            (function () {
+                "use strict";
 
-        <!-- Footer -->
-        <footer class="footer">
-            <p>Al utilizar esta herramienta, aceptas nuestra 
-                <a href="https://zendtay-studio.github.io/privacy-policy" target="_blank" rel="noopener">Política de Privacidad</a>
-            </p>
-            <p style="margin-top: 8px; opacity: 0.7;">ZendTay Studio™ · Herramienta para desarrolladores Android</p>
-        </footer>
-    </div>
+                // DOM Elements
+                const svgInput = document.getElementById("svgInput");
+                const xmlOutput = document.getElementById("xmlOutput");
+                const convertBtn = document.getElementById("convertBtn");
+                const selectFileBtn = document.getElementById("selectFileBtn");
+                const copyBtn = document.getElementById("copyBtn");
+                const downloadBtn = document.getElementById("downloadBtn");
+                const fileInput = document.getElementById("fileInput");
+                const themeToggle = document.getElementById("themeToggle");
 
-    <!-- Hidden file input -->
-    <input type="file" id="fileInput" class="file-input" accept=".svg" />
-
-    <script>
-        (function() {
-            'use strict';
-
-            // DOM Elements
-            const svgInput = document.getElementById('svgInput');
-            const xmlOutput = document.getElementById('xmlOutput');
-            const convertBtn = document.getElementById('convertBtn');
-            const selectFileBtn = document.getElementById('selectFileBtn');
-            const copyBtn = document.getElementById('copyBtn');
-            const downloadBtn = document.getElementById('downloadBtn');
-            const fileInput = document.getElementById('fileInput');
-            const themeToggle = document.getElementById('themeToggle');
-
-            // Theme management
-            function initTheme() {
-                const isDark = localStorage.getItem('theme') === 'dark';
-                document.body.classList.toggle('dark', isDark);
-                updateThemeMeta(isDark);
-            }
-
-            function toggleTheme() {
-                const isDark = document.body.classList.toggle('dark');
-                localStorage.setItem('theme', isDark ? 'dark' : 'light');
-                updateThemeMeta(isDark);
-            }
-
-            function updateThemeMeta(isDark) {
-                const themeMeta = document.querySelector('meta[name="theme-color"]');
-                const appleMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
-                if (themeMeta) {
-                    themeMeta.setAttribute('content', isDark ? '#0f172a' : '#f8fafc');
-                }
-                if (appleMeta) {
-                    appleMeta.setAttribute('content', isDark ? 'black-translucent' : 'default');
-                }
-            }
-
-            // Toast notification
-            function showToast(message, duration = 2000) {
-                const existingToast = document.querySelector('.toast');
-                if (existingToast) existingToast.remove();
-
-                const toast = document.createElement('div');
-                toast.className = 'toast';
-                toast.textContent = message;
-                document.body.appendChild(toast);
-
-                requestAnimationFrame(() => {
-                    toast.style.opacity = '1';
-                });
-
-                setTimeout(() => {
-                    toast.style.opacity = '0';
-                    setTimeout(() => toast.remove(), 300);
-                }, duration);
-            }
-
-            // SVG to Vector Drawable conversion
-            function svgToVectorDrawable(svgString) {
-                const parser = new DOMParser();
-                const svgDoc = parser.parseFromString(svgString, 'image/svg+xml');
-                const svgEl = svgDoc.querySelector('svg');
-                
-                if (!svgEl) {
-                    throw new Error('No se encontró elemento <svg> válido');
+                // Theme management
+                function initTheme() {
+                    const savedTheme = localStorage.getItem("theme");
+                    // Si no hay tema guardado, usar oscuro por defecto
+                    const isDark =
+                        savedTheme === null ? true : savedTheme === "dark";
+                    document.body.classList.toggle("dark", isDark);
+                    updateThemeMeta(isDark);
                 }
 
-                // Extract dimensions
-                let width = svgEl.getAttribute('width') || '24';
-                let height = svgEl.getAttribute('height') || '24';
-                width = width.replace(/[^\d.]/g, '') || '24';
-                height = height.replace(/[^\d.]/g, '') || '24';
-                
-                const viewBox = svgEl.getAttribute('viewBox') || `0 0 ${width} ${height}`;
-                const [minX, minY, vWidth, vHeight] = viewBox.split(/\s+/);
-
-                // Process paths
-                const paths = svgDoc.querySelectorAll('path');
-                if (paths.length === 0) {
-                    throw new Error('No se encontraron elementos <path> en el SVG');
+                function toggleTheme() {
+                    const isDark = document.body.classList.toggle("dark");
+                    localStorage.setItem("theme", isDark ? "dark" : "light");
+                    updateThemeMeta(isDark);
                 }
 
-                let pathElements = '';
-                paths.forEach(path => {
-                    const d = path.getAttribute('d');
-                    const fill = path.getAttribute('fill') || '#000000';
-                    const stroke = path.getAttribute('stroke');
-                    const strokeWidth = path.getAttribute('stroke-width');
+                function updateThemeMeta(isDark) {
+                    const themeMeta = document.querySelector(
+                        'meta[name="theme-color"]',
+                    );
+                    const appleMeta = document.querySelector(
+                        'meta[name="apple-mobile-web-app-status-bar-style"]',
+                    );
+                    if (themeMeta) {
+                        themeMeta.setAttribute(
+                            "content",
+                            isDark ? "#0f172a" : "#f8fafc",
+                        );
+                    }
+                    if (appleMeta) {
+                        appleMeta.setAttribute(
+                            "content",
+                            isDark ? "black-translucent" : "default",
+                        );
+                    }
+                }
 
-                    if (d) {
-                        let pathAttrs = '';
-                        if (fill && fill !== 'none') {
-                            pathAttrs += `\n        android:fillColor="${fill}"`;
-                        }
-                        if (stroke && stroke !== 'none') {
-                            pathAttrs += `\n        android:strokeColor="${stroke}"`;
-                            if (strokeWidth) {
-                                pathAttrs += `\n        android:strokeWidth="${strokeWidth}"`;
+                // Toast notification
+                function showToast(message, duration = 2000) {
+                    const existingToast = document.querySelector(".toast");
+                    if (existingToast) existingToast.remove();
+
+                    const toast = document.createElement("div");
+                    toast.className = "toast";
+                    toast.textContent = message;
+                    document.body.appendChild(toast);
+
+                    requestAnimationFrame(() => {
+                        toast.style.opacity = "1";
+                    });
+
+                    setTimeout(() => {
+                        toast.style.opacity = "0";
+                        setTimeout(() => toast.remove(), 300);
+                    }, duration);
+                }
+
+                // SVG to Vector Drawable conversion
+                function svgToVectorDrawable(svgString) {
+                    const parser = new DOMParser();
+                    const svgDoc = parser.parseFromString(
+                        svgString,
+                        "image/svg+xml",
+                    );
+                    const svgEl = svgDoc.querySelector("svg");
+
+                    if (!svgEl) {
+                        throw new Error("No se encontró elemento <svg> válido");
+                    }
+
+                    // Extract dimensions
+                    let width = svgEl.getAttribute("width") || "24";
+                    let height = svgEl.getAttribute("height") || "24";
+                    width = width.replace(/[^\d.]/g, "") || "24";
+                    height = height.replace(/[^\d.]/g, "") || "24";
+
+                    const viewBox =
+                        svgEl.getAttribute("viewBox") ||
+                        `0 0 ${width} ${height}`;
+                    const [minX, minY, vWidth, vHeight] = viewBox.split(/\s+/);
+
+                    // Process paths
+                    const paths = svgDoc.querySelectorAll("path");
+                    if (paths.length === 0) {
+                        throw new Error(
+                            "No se encontraron elementos <path> en el SVG",
+                        );
+                    }
+
+                    let pathElements = "";
+                    paths.forEach((path) => {
+                        const d = path.getAttribute("d");
+                        const fill = path.getAttribute("fill") || "#000000";
+                        const stroke = path.getAttribute("stroke");
+                        const strokeWidth = path.getAttribute("stroke-width");
+
+                        if (d) {
+                            let pathAttrs = "";
+                            if (fill && fill !== "none") {
+                                pathAttrs += `\n        android:fillColor="${fill}"`;
                             }
+                            if (stroke && stroke !== "none") {
+                                pathAttrs += `\n        android:strokeColor="${stroke}"`;
+                                if (strokeWidth) {
+                                    pathAttrs += `\n        android:strokeWidth="${strokeWidth}"`;
+                                }
+                            }
+                            pathElements += `    <path${pathAttrs}\n        android:pathData="${d}" />\n`;
                         }
-                        pathElements += `    <path${pathAttrs}\n        android:pathData="${d}" />\n`;
+                    });
+
+                    return `<?xml version="1.0" encoding="utf-8"?>\n<vector xmlns:android="http://schemas.android.com/apk/res/android"\n    android:width="${width}dp"\n    android:height="${height}dp"\n    android:viewportWidth="${vWidth}"\n    android:viewportHeight="${vHeight}">\n${pathElements}</vector>`;
+                }
+
+                // Convert function
+                function convert() {
+                    const svgString = svgInput.value.trim();
+                    if (!svgString) {
+                        xmlOutput.value = "";
+                        return;
                     }
-                });
 
-                return `<?xml version="1.0" encoding="utf-8"?>\n<vector xmlns:android="http://schemas.android.com/apk/res/android"\n    android:width="${width}dp"\n    android:height="${height}dp"\n    android:viewportWidth="${vWidth}"\n    android:viewportHeight="${vHeight}">\n${pathElements}</vector>`;
-            }
-
-            // Convert function
-            function convert() {
-                const svgString = svgInput.value.trim();
-                if (!svgString) {
-                    xmlOutput.value = '';
-                    return;
+                    try {
+                        const result = svgToVectorDrawable(svgString);
+                        xmlOutput.value = result;
+                    } catch (error) {
+                        xmlOutput.value = `Error de conversión: ${error.message}`;
+                        showToast("Error al convertir el SVG", 3000);
+                    }
                 }
 
-                try {
-                    const result = svgToVectorDrawable(svgString);
-                    xmlOutput.value = result;
-                } catch (error) {
-                    xmlOutput.value = `Error de conversión: ${error.message}`;
-                    showToast('Error al convertir el SVG', 3000);
-                }
-            }
+                // Handle file selection
+                function handleFileSelect(event) {
+                    const file = event.target.files[0];
+                    if (!file) return;
 
-            // Handle file selection
-            function handleFileSelect(event) {
-                const file = event.target.files[0];
-                if (!file) return;
+                    if (!file.name.toLowerCase().endsWith(".svg")) {
+                        showToast(
+                            "Por favor selecciona un archivo .svg válido",
+                            3000,
+                        );
+                        return;
+                    }
 
-                if (!file.name.toLowerCase().endsWith('.svg')) {
-                    showToast('Por favor selecciona un archivo .svg válido', 3000);
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    svgInput.value = e.target.result;
-                    convert();
-                    showToast(`Archivo cargado: ${file.name}`);
-                };
-                reader.readAsText(file);
-                
-                // Reset input to allow selecting the same file again
-                fileInput.value = '';
-            }
-
-            // Copy to clipboard
-            async function copyToClipboard() {
-                const content = xmlOutput.value;
-                if (!content) {
-                    showToast('No hay contenido para copiar', 2000);
-                    return;
-                }
-
-                try {
-                    await navigator.clipboard.writeText(content);
-                    showToast('XML copiado al portapapeles');
-                } catch (err) {
-                    // Fallback
-                    xmlOutput.select();
-                    document.execCommand('copy');
-                    showToast('XML copiado al portapapeles');
-                }
-            }
-
-            // Download XML file
-            function downloadXML() {
-                const content = xmlOutput.value;
-                if (!content) {
-                    showToast('No hay contenido para descargar', 2000);
-                    return;
-                }
-
-                const blob = new Blob([content], { type: 'application/xml' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `vector_drawable_${Date.now()}.xml`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                showToast('Archivo descargado');
-            }
-
-            // Auto-convert on input (debounced)
-            let debounceTimer;
-            function handleAutoConvert() {
-                clearTimeout(debounceTimer);
-                debounceTimer = setTimeout(() => {
-                    if (svgInput.value.trim()) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        svgInput.value = e.target.result;
                         convert();
-                    }
-                }, 300);
-            }
+                        showToast(`Archivo cargado: ${file.name}`);
+                    };
+                    reader.readAsText(file);
 
-            // Event listeners
-            function init() {
-                initTheme();
-                
-                themeToggle.addEventListener('click', toggleTheme);
-                convertBtn.addEventListener('click', convert);
-                selectFileBtn.addEventListener('click', () => fileInput.click());
-                copyBtn.addEventListener('click', copyToClipboard);
-                downloadBtn.addEventListener('click', downloadXML);
-                fileInput.addEventListener('change', handleFileSelect);
-                svgInput.addEventListener('input', handleAutoConvert);
-                
-                // Select all text on click
-                svgInput.addEventListener('click', (e) => e.target.select());
-                xmlOutput.addEventListener('click', (e) => e.target.select());
-                
-                // Keyboard shortcuts
-                document.addEventListener('keydown', (e) => {
-                    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                        e.preventDefault();
-                        convert();
-                    }
-                });
-            }
+                    // Reset input to allow selecting the same file again
+                    fileInput.value = "";
+                }
 
-            // Start
-            init();
-        })();
-    </script>
-</body>
+                // Copy to clipboard
+                async function copyToClipboard() {
+                    const content = xmlOutput.value;
+                    if (!content) {
+                        showToast("No hay contenido para copiar", 2000);
+                        return;
+                    }
+
+                    try {
+                        await navigator.clipboard.writeText(content);
+                        showToast("XML copiado al portapapeles");
+                    } catch (err) {
+                        // Fallback
+                        xmlOutput.select();
+                        document.execCommand("copy");
+                        showToast("XML copiado al portapapeles");
+                    }
+                }
+
+                // Download XML file
+                function downloadXML() {
+                    const content = xmlOutput.value;
+                    if (!content) {
+                        showToast("No hay contenido para descargar", 2000);
+                        return;
+                    }
+
+                    const blob = new Blob([content], {
+                        type: "application/xml",
+                    });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = `vector_drawable_${Date.now()}.xml`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+
+                    showToast("Archivo descargado");
+                }
+
+                // Auto-convert on input (debounced)
+                let debounceTimer;
+                function handleAutoConvert() {
+                    clearTimeout(debounceTimer);
+                    debounceTimer = setTimeout(() => {
+                        if (svgInput.value.trim()) {
+                            convert();
+                        }
+                    }, 300);
+                }
+
+                // Event listeners
+                function init() {
+                    initTheme();
+
+                    themeToggle.addEventListener("click", toggleTheme);
+                    convertBtn.addEventListener("click", convert);
+                    selectFileBtn.addEventListener("click", () =>
+                        fileInput.click(),
+                    );
+                    copyBtn.addEventListener("click", copyToClipboard);
+                    downloadBtn.addEventListener("click", downloadXML);
+                    fileInput.addEventListener("change", handleFileSelect);
+                    svgInput.addEventListener("input", handleAutoConvert);
+
+                    // Select all text on click
+                    svgInput.addEventListener("click", (e) =>
+                        e.target.select(),
+                    );
+                    xmlOutput.addEventListener("click", (e) =>
+                        e.target.select(),
+                    );
+
+                    // Keyboard shortcuts
+                    document.addEventListener("keydown", (e) => {
+                        if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+                            e.preventDefault();
+                            convert();
+                        }
+                    });
+                }
+
+                // Start
+                init();
+            })();
+        </script>
+    </body>
 </html>
